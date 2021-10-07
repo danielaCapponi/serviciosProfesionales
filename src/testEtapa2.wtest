@@ -1,0 +1,24 @@
+import Profesionales.*
+import provincias.*
+import Universidades.*
+import Solicitantes.*
+import Empresas.*
+
+describe "Tests para la etapa 2 del ejercicio" {
+
+	const juana = new ProfesionalVinculado(universidad = universidadHurlingham)
+	const luciana = new ProfesionalLibre(universidad = universidadRosario, honorarios = 3200, puedeTrabajarEn = #{ santaFe, entreRios })
+	const empresa = new Empresa(profesionalesContratados = #{ juana, luciana }, honorarioDeReferencia = 2000)
+	const solicitantePersona = new Persona(provincia = corrientes)
+	const solicitanteInstitucion = new Institucion(universidadesReconocidas = #{ universidadHurlingham, universidadSanMartin })
+
+	test "solicitantePersona no puede ser atendida por empresa, porque no incluye su provincia" {
+		assert.notThat(empresa.puedeSatisfacerA(solicitantePersona))
+	}
+
+	test "solicitanteInstitucion puede ser atendida por empresa, porque incluye su provincia" {
+		assert.that(empresa.puedeSatisfacerA(solicitanteInstitucion))
+	}
+
+}
+

@@ -1,0 +1,43 @@
+import provincias.*
+import Profesionales.*
+import Universidades.*
+import asociaciones.*
+
+describe "Tests para la etapa 3 del ejercicio" {
+
+	const juana = new ProfesionalVinculado(universidad = universidadHurlingham)
+	const luciana = new ProfesionalLibre(universidad = universidadRosario, honorarios = 3200, puedeTrabajarEn = #{ santaFe, entreRios })
+	const pedro = new ProfesionalAsociadoLitoral(universidad = universidadRosario)
+	const cobro = 5000
+
+	method initializa() {
+		universidadHurlingham.totalRecibidoDonaciones(0)
+		universidadRosario.totalRecibidoDonaciones(0)
+		asociacionProfesionalesLitoral.totalRecibidoDonaciones(0)
+	}
+
+	test "universidadHurlingham recibe como donación de juana la mitad del cobro" {
+		juana.cobrar(cobro)
+		assert.equals(cobro / 2, universidadHurlingham.totalRecibidoDonaciones())
+	}
+
+	test "universidadRosario no recibe nada de luciana cuando cobra" {
+		luciana.cobrar(cobro)
+		assert.equals(0, universidadRosario.totalRecibidoDonaciones())
+	}
+
+	test "universidadRosario no recibe nada de pedro cuando cobra, la asociacionProfesionalesLitoral recibe todo" {
+		pedro.cobrar(cobro)
+		assert.equals(0, universidadRosario.totalRecibidoDonaciones())
+		assert.equals(cobro, asociacionProfesionalesLitoral.totalRecibidoDonaciones())
+	}
+
+	test "luciana le puede pasar de su dinero a juana, y la universidadHurlingham recibe donación" {
+		const recaudadoInicial = luciana.recaudado()
+		luciana.pasarDineroA(juana, cobro)
+		assert.equals(recaudadoInicial - cobro, luciana.recaudado())
+		assert.equals(cobro / 2, universidadHurlingham.totalRecibidoDonaciones())
+	}
+
+}
+

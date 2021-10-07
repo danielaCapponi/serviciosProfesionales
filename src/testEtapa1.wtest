@@ -1,0 +1,39 @@
+import Empresas.*
+import Profesionales.*
+import provincias.*
+import Universidades.*
+
+describe "Tests para la etapa 1 del ejercicio" {
+
+	const juana = new ProfesionalVinculado(universidad = universidadRosario)
+	const melina = new ProfesionalAsociadoLitoral(universidad = universidadCorrientes)
+	const rocio = new ProfesionalLibre(universidad = universidadHurlingham, honorarios = 5000, puedeTrabajarEn = #{ santaFe, cordoba, buenosAires })
+	const luciana = new ProfesionalLibre(universidad = universidadRosario, honorarios = 3200, puedeTrabajarEn = #{ santaFe, entreRios })
+	const empresa = new Empresa(profesionalesContratados = #{ juana, melina, rocio, luciana }, honorarioDeReferencia = 3500)
+
+	test "Dos de sus profesionales estudiaron en Rosario" {
+		assert.equals(2, empresa.cuantosEstudiaronEn(universidadRosario))
+	}
+
+	test "1 de sus profesionales estudiaron en Hulringham" {
+		assert.equals(1, empresa.cuantosEstudiaronEn(universidadHurlingham))
+	}
+
+	test "0 de sus profesionales estudiaron en San Martín" {
+		assert.equals(0, empresa.cuantosEstudiaronEn(universidadSanMartin))
+	}
+
+	test "El único profesional caro es Rocío" {
+		assert.equals(#{ rocio }, empresa.profesionalesCaros())
+	}
+
+	test "Las universidades formadoras son Rosario, Corrientes y HUrlingham" {
+		assert.equals(#{ universidadRosario, universidadCorrientes, universidadHurlingham }, empresa.universidadesFormadoras())
+	}
+
+	test "El profesional más barato es Juana" {
+		assert.equals(juana, empresa.profesionalMasBarato())
+	}
+
+}
+
